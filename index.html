@@ -687,6 +687,29 @@
                 width: 24px;
                 height: 24px;
             }
+
+            .donation-widget {
+                top: 100px;
+                left: 16px;
+                right: 16px;
+                max-width: none;
+                padding: 16px;
+            }
+
+            .donation-widget .donation-title {
+                font-size: 14px;
+                margin-bottom: 12px;
+            }
+
+            .donation-widget .crypto-address {
+                font-size: 11px;
+                padding: 10px 12px;
+            }
+
+            .donation-widget .crypto-address .address-text {
+                font-size: 10px;
+                word-break: break-all;
+            }
         }
 
         /* Animations on scroll */
@@ -1090,6 +1113,124 @@
         .chrome-install-btn svg {
             flex-shrink: 0;
         }
+
+        /* ===== Виджет пожертвований ===== */
+        .donation-widget {
+            position: fixed;
+            top: 100px;
+            left: 24px;
+            z-index: 9998;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 10px;
+            max-width: 320px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .donation-widget:hover {
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .donation-widget .donation-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .donation-widget .donation-title::before {
+            content: '💝';
+            font-size: 20px;
+        }
+
+        .donation-widget .crypto-address {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 10px;
+            padding: 3px 5px;
+            margin-bottom: 10px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .donation-widget .crypto-address:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .donation-widget .crypto-address:last-child {
+            margin-bottom: 0;
+        }
+
+        .donation-widget .crypto-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.8);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .donation-widget .crypto-label .crypto-icon {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+        }
+
+        .donation-widget .address-text {
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            color: white;
+            word-break: break-all;
+            line-height: 1.4;
+        }
+
+        .donation-widget .copy-hint {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 4px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .donation-widget .crypto-address:hover .copy-hint {
+            opacity: 1;
+        }
+
+        .donation-widget .crypto-address.copied {
+            background: rgba(76, 175, 80, 0.3);
+            border-color: rgba(76, 175, 80, 0.5);
+        }
+
+        .donation-widget .crypto-address.copied .copy-hint {
+            opacity: 1;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Скрытие виджета при открытой модалке */
+        .modal-overlay.active~.donation-widget,
+        body.modal-open .donation-widget {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(20px);
+        }
     </style>
 </head>
 
@@ -1278,6 +1419,29 @@
         </footer>
     </div>
 
+    <!-- Виджет пожертвований -->
+    <div class="donation-widget" id="donationWidget">
+        <div class="donation-title">Пожертвования проекту</div>
+
+        <div class="crypto-address" data-address="bc1qwq6jjk9kyw30252jd3dnr2zj0788t3etmke7m5">
+            <div class="crypto-label">
+                <span class="crypto-icon">₿</span>
+                Bitcoin (BTC)
+            </div>
+            <div class="address-text">bc1qwq6jjk9kyw30252jd3dnr2zj0788t3etmke7m5</div>
+            <div class="copy-hint">Нажмите, чтобы скопировать</div>
+        </div>
+
+        <div class="crypto-address" data-address="0x59CE5575A1Fcde7581F58d5DC872FB9F3efe40bC">
+            <div class="crypto-label">
+                <span class="crypto-icon">₮</span>
+                Tether (USDT BEP-20)
+            </div>
+            <div class="address-text">0x59CE5575A1Fcde7581F58d5DC872FB9F3efe40bC</div>
+            <div class="copy-hint">Нажмите, чтобы скопировать</div>
+        </div>
+    </div>
+
     <!-- Модальное окно установки (вынесено из .main-content) -->
     <div class="modal-overlay" id="installModal">
         <div class="modal">
@@ -1418,21 +1582,25 @@
         const openModalBtn = document.getElementById('openInstallModal');
         const closeModalBtn = document.getElementById('closeModal');
         const modal = document.getElementById('installModal');
+        const donationWidget = document.getElementById('donationWidget');
 
         openModalBtn.addEventListener('click', () => {
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
+            document.body.classList.add('modal-open');
         });
 
         closeModalBtn.addEventListener('click', () => {
             modal.classList.remove('active');
             document.body.style.overflow = '';
+            document.body.classList.remove('modal-open');
         });
 
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
                 modal.classList.remove('active');
                 document.body.style.overflow = '';
+                document.body.classList.remove('modal-open');
             }
         });
 
@@ -1440,6 +1608,7 @@
             if (e.key === 'Escape' && modal.classList.contains('active')) {
                 modal.classList.remove('active');
                 document.body.style.overflow = '';
+                document.body.classList.remove('modal-open');
             }
         });
 
@@ -1477,6 +1646,32 @@
                         }, 200);
                     }
                 });
+            });
+        });
+
+        // Копирование адресов криптовалют
+        const cryptoAddresses = document.querySelectorAll('.crypto-address');
+
+        cryptoAddresses.forEach(addressEl => {
+            addressEl.addEventListener('click', async () => {
+                const address = addressEl.getAttribute('data-address');
+                const copyHint = addressEl.querySelector('.copy-hint');
+
+                try {
+                    await navigator.clipboard.writeText(address);
+
+                    // Визуальная обратная связь
+                    addressEl.classList.add('copied');
+                    copyHint.textContent = '✓ Скопировано!';
+
+                    setTimeout(() => {
+                        addressEl.classList.remove('copied');
+                        copyHint.textContent = 'Нажмите, чтобы скопировать';
+                    }, 2000);
+                } catch (err) {
+                    console.error('Ошибка копирования:', err);
+                    copyHint.textContent = 'Ошибка копирования';
+                }
             });
         });
     </script>
