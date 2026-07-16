@@ -1064,6 +1064,32 @@
             background: rgba(255, 255, 255, 0.2);
             border-radius: 3px;
         }
+
+        /* Большая кнопка установки из Chrome Store */
+        .chrome-install-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 28px;
+            background: linear-gradient(135deg, #4285F4 0%, #34A853 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(66, 133, 244, 0.4);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .chrome-install-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(66, 133, 244, 0.55);
+        }
+
+        .chrome-install-btn svg {
+            flex-shrink: 0;
+        }
     </style>
 </head>
 
@@ -1267,13 +1293,39 @@
 
             <!-- Вкладки -->
             <div class="modal-tabs">
-                <button class="modal-tab-btn active" data-tab="manual">Ручная установка</button>
-                <button class="modal-tab-btn" data-tab="chrome">Магазин Chrome</button>
+                <button class="modal-tab-btn active" data-tab="chrome">Магазин Chrome</button>
+                <button class="modal-tab-btn" data-tab="manual">Ручная установка</button>
                 <button class="modal-tab-btn" data-tab="firefox">Firefox (Android)</button>
             </div>
 
+            <!-- Вкладка 1: Магазин Chrome -->
+            <div class="tab-content active visible" id="tab-chrome">
+                <div class="dev-placeholder">
+                    <div class="dev-placeholder-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10" />
+                            <circle cx="12" cy="12" r="4" />
+                            <line x1="21.17" y1="8" x2="12" y2="8" />
+                            <line x1="3.95" y1="6.06" x2="8.54" y2="14" />
+                            <line x1="10.88" y1="21.94" x2="15.46" y2="14" />
+                        </svg>
+                    </div>
+                    <a href="https://chromewebstore.google.com/detail/daaebmglpcmpbeclldjdimknnmbddmak"
+                        class="chrome-install-btn" target="_blank" rel="noopener">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                            <polyline points="7 10 12 15 17 10" />
+                            <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
+                        Установить из Chrome Web Store
+                    </a>
+                </div>
+            </div>
+
             <!-- Вкладка 1: Ручная установка -->
-            <div class="tab-content active visible" id="tab-manual">
+            <div class="tab-content" id="tab-manual">
                 <div class="steps-list">
                     <div class="step-item">
                         <div class="step-number">1</div>
@@ -1311,26 +1363,6 @@
                             <h4>Делитесь с друзьями! 💜</h4>
                             <p>Расскажите близким о безопасном общении. Вместе мы делаем интернет приватнее!</p>
                         </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Вкладка 2: Chrome (Yandex и др.) -->
-            <div class="tab-content" id="tab-chrome">
-                <div class="dev-placeholder">
-                    <div class="dev-placeholder-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 2L2 7l10 5 10-5-10-5z" />
-                            <path d="M2 17l10 5 10-5" />
-                            <path d="M2 12l10 5 10-5" />
-                        </svg>
-                    </div>
-                    <h3>Публикуется...</h3>
-                    <p>Выполняется публикация для браузеров на базе Chromium (Chrome, Яндекс.Браузер, Brave и др.)</p>
-                    <div class="dev-badge">
-                        <span class="dot"></span>
-                        Скоро
                     </div>
                 </div>
             </div>
